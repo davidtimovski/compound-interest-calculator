@@ -1,0 +1,12 @@
+.vs/
+bin/
+obj/
+*.user
+artifacts/
+.vscode/
+.dotnet/
+*.binlog
+
+# Publish scripts
+Publish.lnk
+publish.ps1

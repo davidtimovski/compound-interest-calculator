@@ -1,0 +1,164 @@
+﻿html, body {
+    background: #0e1e43;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 16px;
+    color: #fafafa;
+}
+
+.loading-wrap {
+    margin-top: 4rem;
+    text-align: center;
+}
+.loading-text {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.wrap {
+    display: flex;
+}
+.center {
+    width: 100%;
+}
+.side {
+    flex: 1;
+}
+
+main {
+    padding: 10px;
+}
+
+.header {
+    margin: 1rem 0 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+table {
+    width: 100%;
+}
+
+.form td {
+    padding: 3px 0;
+}
+.form td:last-child {
+    text-align: right;
+}
+
+input, select, button {
+    border: 1px solid #2b3a5d;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #fafafa;
+}
+input, select {
+    background: #0b1a3d;
+    outline: none;
+    padding: 5px 10px;
+    text-align: center;
+    transition: border-color 200ms;
+}
+    input:focus, select:focus {
+        border-color: #46a4a1;
+    }
+
+input {
+    width: 4rem;
+}
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+.small-input {
+    width: 2rem;
+    margin-right: 5px;
+}
+
+.calculate-button-wrap {
+    display: flex;
+    margin-top: 20px;
+}
+    .calculate-button-wrap > div,
+    .calculate-button-wrap > button {
+        width: 50%;
+    }
+
+    .calculate-button-wrap button {
+        background: #1b2a4d;
+        border: 1px solid #3b4a6d;
+        outline: none;
+        padding: 5px;
+    }
+    .calculate-button-wrap button:active {
+        border-color: #5b6a8d;
+    }
+
+.results {
+    display: none;
+    margin: 20px 0 10px;
+    font-size: 0.8rem;
+}
+.results.visible {
+    display: table;
+}
+    .results tbody tr:nth-child(odd):not(:last-child) {
+        background: #19294c;
+    }
+    .results th, .results td {
+        padding: 6px 5px;
+    }
+    .results th {
+        border-bottom: 1px solid #3b4a6d;
+        line-height: 1rem;
+        vertical-align: middle;
+        color: #ffad51;
+    }
+    .results tr:last-child td {
+        background: rgba(20,154,76, 0.4);
+        color: #fff;
+    }
+.total-deposits {
+    display: none;
+}
+    .total-deposits.visible {
+        display: table-cell;
+    }
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    color: #000;
+}
+
+@media screen and ( min-width: 400px ) {
+    .center {
+        width: 400px;
+    }
+}
+
+@media screen and ( min-width: 550px ) {
+    html, body {
+        font-size: 17px;
+    }
+}
+
+@media screen and ( min-width: 650px ) {
+    html, body {
+        font-size: 18px;
+    }
+
+    .center {
+        width: 450px;
+    }
+}

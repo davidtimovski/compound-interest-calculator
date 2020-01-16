@@ -1,0 +1,102 @@
+﻿@page "/"
+@using CompoundInterestCalculator.Web.Services
+@using CompoundInterestCalculator.Web.Models
+@using Microsoft.JSInterop
+@inject ICalculatorService CalculatorService
+@inject IJSRuntime JSRuntime
+
+<div class="header">Calculate compound interest</div>
+
+<table class="form">
+    <tr>
+        <td><label for="base-amount">Base amount:</label></td>
+        <td><input type="number" id="base-amount" @bind="input.BaseAmount" min="0" required /></td>
+    </tr>
+    <tr>
+        <td><label for="interest-rate">Interest rate (yearly):</label></td>
+        <td><input type="number" id="interest-rate" @bind="input.InterestRatePercent" class="small-input" step="any" min="0.1" required /> %</td>
+    </tr>
+    <tr>
+        <td><label for="compound-interval">Compound interval:</label></td>
+        <td>
+            <select id="compound-interval" @bind="@input.CompoundInterval">
+                @foreach (var compoundInterval in compoundIntervals)
+                {
+                    <option value="@compoundInterval.Value">@compoundInterval.Key</option>
+                }
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="monthly-deposit">Monthly deposit:</label></td>
+        <td><input type="number" id="monthly-deposit" @bind="input.MonthlyDeposit" min="0" required /></td>
+    </tr>
+    <tr>
+        <td><label for="calculation-period">Calculation period:</label></td>
+        <td><input type="number" id="calculation-period" @bind="input.CalcPeriodYrs" class="small-input" min="1" max="100" /> years</td>
+    </tr>
+</table>
+
+<div class="calculate-button-wrap">
+    <div></div>
+    <button type="button" @onclick="Calculate">Calculate</button>
+</div>
+
+
+<table id="results-table" class="results @(result.Length > 0 ? "visible" : "")">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th class="total-deposits @(totalDepositsColVisible ? "visible" : "")">Total deposits</th>
+            <th>Year interest</th>
+            <th>Total interest</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CalculationResult year in result)
+        {
+            <tr>
+                <td>@year.Year</td>
+                <td class="total-deposits @(totalDepositsColVisible ? "visible" : "")">@year.TotalDeposits.ToString("N")</td>
+                <td>@year.YearInterest.ToString("N")</td>
+                <td>@year.TotalInterest.ToString("N")</td>
+                <td>@year.Balance.ToString("N")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private CalculationInput input = new CalculationInput();
+    private Dictionary<string, CompoundInterval> compoundIntervals = new Dictionary<string, CompoundInterval>
+{
+        { "Monthly", CompoundInterval.Monthly },
+        { "Quarterly", CompoundInterval.Quarterly },
+        { "Semi-annually", CompoundInterval.SemiAnnually },
+        { "Annually", CompoundInterval.Annually }
+    };
+    private bool totalDepositsColVisible;
+    private CalculationResult[] result = new CalculationResult[] { };
+
+    private async Task Calculate()
+    {
+        if (input.IsValid())
+        {
+            totalDepositsColVisible = input.MonthlyDeposit.HasValue && input.MonthlyDeposit.Value > 0;
+
+            input.BaseAmount = input.BaseAmount ?? 0;
+            input.MonthlyDeposit = input.MonthlyDeposit ?? 0;
+
+            result = CalculatorService.Calculate(
+                input.BaseAmount.Value,
+                input.InterestRatePercent.Value,
+                input.CompoundInterval,
+                input.MonthlyDeposit.Value,
+                input.CalcPeriodYrs.Value);
+
+            await JSRuntime.InvokeVoidAsync("jsFunctions.scrollToResults");
+        }
+    }
+}
+
