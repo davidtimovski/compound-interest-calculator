@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using CompoundInterestCalculator.Web.Services;
+using Microsoft.AspNetCore.Blazor.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace CompoundInterestCalculator.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
-        }
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.Services.AddTransient<ICalculatorService, CalculatorService>();
+            builder.RootComponents.Add<App>("app");
 
-        public static IWebAssemblyHostBuilder CreateHostBuilder(string[] args) =>
-            BlazorWebAssemblyHost.CreateDefaultBuilder()
-                .UseBlazorStartup<Startup>();
+            var host = builder.Build();
+            await host.RunAsync();
+        }
     }
 }
