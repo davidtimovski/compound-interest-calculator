@@ -1,14 +1,16 @@
-﻿@inherits IndexBase
-@page "/"
+﻿@page "/"
+@using CompoundInterestCalculator.Web.Services
 @using CompoundInterestCalculator.Web.Models
-@using CompoundInterestCalculator.Pages
+@using Microsoft.JSInterop
+@inject ICalculatorService CalculatorService
+@inject IJSRuntime JSRuntime
 
 <div class="header">Calculate compound interest</div>
 
 <table class="form">
     <tr>
         <td><label for="base-amount">Base amount:</label></td>
-        <td><input type="number" id="base-amount" @bind="@input.BaseAmount" min="0" required /></td>
+        <td><input type="number" id="base-amount" @bind="input.BaseAmount" min="0" required /></td>
     </tr>
     <tr>
         <td><label for="interest-rate">Interest rate (yearly):</label></td>
@@ -64,3 +66,37 @@
         }
     </tbody>
 </table>
+
+@code {
+    private CalculationInput input = new CalculationInput();
+    private Dictionary<string, CompoundInterval> compoundIntervals = new Dictionary<string, CompoundInterval>
+{
+        { "Monthly", CompoundInterval.Monthly },
+        { "Quarterly", CompoundInterval.Quarterly },
+        { "Semi-annually", CompoundInterval.SemiAnnually },
+        { "Annually", CompoundInterval.Annually }
+    };
+    private bool totalDepositsColVisible;
+    private CalculationResult[] result = new CalculationResult[] { };
+
+    private async Task Calculate()
+    {
+        if (input.IsValid())
+        {
+            totalDepositsColVisible = input.MonthlyDeposit.HasValue && input.MonthlyDeposit.Value > 0;
+
+            input.BaseAmount = input.BaseAmount ?? 0;
+            input.MonthlyDeposit = input.MonthlyDeposit ?? 0;
+
+            result = CalculatorService.Calculate(
+                input.BaseAmount.Value,
+                input.InterestRatePercent.Value,
+                input.CompoundInterval,
+                input.MonthlyDeposit.Value,
+                input.CalcPeriodYrs.Value);
+
+            await JSRuntime.InvokeVoidAsync("jsFunctions.scrollToResults");
+        }
+    }
+}
+
