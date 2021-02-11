@@ -37,8 +37,9 @@
         <div class="side"></div>
     </div>
 
+    <script src="_framework/blazor.webassembly.js"></script>
     <script>
-        if ("serviceWorker" in navigator) { navigator.serviceWorker.register("/sw.js"); }
+        if ("serviceWorker" in navigator) { navigator.serviceWorker.register("service-worker.js"); }
 
         window.jsFunctions = {
             scrollToResults: () => {
@@ -52,7 +53,6 @@
             }
         };
     </script>
-    <script src="_framework/blazor.webassembly.js"></script>
 </body>
 
 </html>

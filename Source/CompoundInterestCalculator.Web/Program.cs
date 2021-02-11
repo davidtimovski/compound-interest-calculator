@@ -1,7 +1,7 @@
-﻿using CompoundInterestCalculator.Web.Services;
-using Microsoft.AspNetCore.Blazor.Hosting;
+﻿using System.Threading.Tasks;
+using CompoundInterestCalculator.Web.Services;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
 
 namespace CompoundInterestCalculator.Web
 {
@@ -13,8 +13,7 @@ namespace CompoundInterestCalculator.Web
             builder.Services.AddTransient<ICalculatorService, CalculatorService>();
             builder.RootComponents.Add<App>("app");
 
-            var host = builder.Build();
-            await host.RunAsync();
+            await builder.Build().RunAsync();
         }
     }
 }

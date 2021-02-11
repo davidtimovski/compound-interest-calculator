@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CompoundInterestCalculator.Web.Models;
 using CompoundInterestCalculator.Web.Services;
@@ -21,7 +22,7 @@ namespace CompoundInterestCalculator.Web.Pages
             { "Annually", CompoundInterval.Annually }
         };
         protected bool totalDepositsColVisible;
-        protected CalculationResult[] result = new CalculationResult[] { };
+        protected CalculationResult[] result = Array.Empty<CalculationResult>();
 
         protected async Task Calculate()
         {
