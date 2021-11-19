@@ -55,10 +55,10 @@
         {
             <tr>
                 <td>@year.Year</td>
-                <td class="total-deposits @(totalDepositsColVisible ? "visible" : "")">@year.TotalDeposits.ToString("N")</td>
-                <td>@year.YearInterest.ToString("N")</td>
-                <td>@year.TotalInterest.ToString("N")</td>
-                <td>@year.Balance.ToString("N")</td>
+                <td class="total-deposits @(totalDepositsColVisible ? "visible" : "")">@year.TotalDeposits.ToString("N2")</td>
+                <td>@year.YearInterest.ToString("N2")</td>
+                <td>@year.TotalInterest.ToString("N2")</td>
+                <td>@year.Balance.ToString("N2")</td>
             </tr>
         }
     </tbody>
