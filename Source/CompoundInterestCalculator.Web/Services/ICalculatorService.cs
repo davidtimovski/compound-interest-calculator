@@ -1,9 +1,8 @@
 ﻿using CompoundInterestCalculator.Web.Models;
 
-namespace CompoundInterestCalculator.Web.Services
+namespace CompoundInterestCalculator.Web.Services;
+
+public interface ICalculatorService
 {
-    public interface ICalculatorService
-    {
-        CalculationResult[] Calculate(double baseAmount, double interestRate, CompoundInterval compoundInterval, double monthlyDeposit, short calcPeriodYrs);
-    }
+    CalculationResult[] Calculate(double baseAmount, double interestRate, CompoundInterval compoundInterval, double monthlyDeposit, short calcPeriodYrs);
 }

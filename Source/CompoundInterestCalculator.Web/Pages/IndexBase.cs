@@ -1,47 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using CompoundInterestCalculator.Web.Models;
+﻿using CompoundInterestCalculator.Web.Models;
 using CompoundInterestCalculator.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
-namespace CompoundInterestCalculator.Web.Pages
+namespace CompoundInterestCalculator.Web.Pages;
+
+public class IndexBase : ComponentBase
 {
-    public class IndexBase : ComponentBase
+    [Inject] ICalculatorService CalculatorService { get; set; }
+    [Inject] IJSRuntime JSRuntime { get; set; }
+
+    protected CalculationInput input = new();
+    protected Dictionary<string, CompoundInterval> compoundIntervals = new()
     {
-        [Inject] ICalculatorService CalculatorService { get; set; }
-        [Inject] IJSRuntime JSRuntime { get; set; }
+        { "Monthly", CompoundInterval.Monthly },
+        { "Quarterly", CompoundInterval.Quarterly },
+        { "Semi-annually", CompoundInterval.SemiAnnually },
+        { "Annually", CompoundInterval.Annually }
+    };
+    protected bool totalDepositsColVisible;
+    protected CalculationResult[] result = Array.Empty<CalculationResult>();
 
-        protected CalculationInput input = new CalculationInput();
-        protected Dictionary<string, CompoundInterval> compoundIntervals = new Dictionary<string, CompoundInterval>
+    protected async Task Calculate()
+    {
+        if (input.IsValid())
         {
-            { "Monthly", CompoundInterval.Monthly },
-            { "Quarterly", CompoundInterval.Quarterly },
-            { "Semi-annually", CompoundInterval.SemiAnnually },
-            { "Annually", CompoundInterval.Annually }
-        };
-        protected bool totalDepositsColVisible;
-        protected CalculationResult[] result = Array.Empty<CalculationResult>();
+            totalDepositsColVisible = input.MonthlyDeposit.HasValue && input.MonthlyDeposit.Value > 0;
 
-        protected async Task Calculate()
-        {
-            if (input.IsValid())
-            {
-                totalDepositsColVisible = input.MonthlyDeposit.HasValue && input.MonthlyDeposit.Value > 0;
+            input.BaseAmount ??= 0;
+            input.MonthlyDeposit ??= 0;
 
-                input.BaseAmount ??= 0;
-                input.MonthlyDeposit ??= 0;
+            result = CalculatorService.Calculate(
+                input.BaseAmount.Value,
+                input.InterestRatePercent.Value,
+                input.CompoundInterval,
+                input.MonthlyDeposit.Value,
+                input.CalcPeriodYrs.Value);
 
-                result = CalculatorService.Calculate(
-                    input.BaseAmount.Value,
-                    input.InterestRatePercent.Value,
-                    input.CompoundInterval,
-                    input.MonthlyDeposit.Value,
-                    input.CalcPeriodYrs.Value);
-
-                await JSRuntime.InvokeVoidAsync("jsFunctions.scrollToResults");
-            }
+            await JSRuntime.InvokeVoidAsync("jsFunctions.scrollToResults");
         }
     }
 }

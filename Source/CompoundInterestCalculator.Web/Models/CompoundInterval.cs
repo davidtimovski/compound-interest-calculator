@@ -1,10 +1,9 @@
-﻿namespace CompoundInterestCalculator.Web.Models
+﻿namespace CompoundInterestCalculator.Web.Models;
+
+public enum CompoundInterval
 {
-    public enum CompoundInterval
-    {
-        Monthly,
-        Quarterly,
-        SemiAnnually,
-        Annually
-    }
+    Monthly,
+    Quarterly,
+    SemiAnnually,
+    Annually
 }
