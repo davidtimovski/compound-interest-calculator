@@ -2,7 +2,7 @@
 
 namespace CompoundInterestCalculator.Web.Services;
 
-public class CalculatorService : ICalculatorService
+public sealed class CalculatorService : ICalculatorService
 {
     private readonly Dictionary<CompoundInterval, int> _compoundsPerYear = new()
     {

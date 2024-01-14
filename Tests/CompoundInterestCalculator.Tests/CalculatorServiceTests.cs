@@ -11,12 +11,8 @@ public class CalculatorServiceTests
     private const double InterestRatePercent = 7.32;
     private const double MonthlyDeposit = 180;
     private const short CalPeriodYrs = 5;
-    private readonly ICalculatorService _sut;
 
-    public CalculatorServiceTests()
-    {
-        _sut = new CalculatorService();
-    }
+    private readonly CalculatorService _sut = new();
 
     [Theory]
     [InlineData(0, InterestRatePercent, CompoundInterval.Monthly, MonthlyDeposit, CalPeriodYrs, 10800, 831.24, 2194.02, 12994.02)]

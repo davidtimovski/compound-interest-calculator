@@ -7,8 +7,8 @@ namespace CompoundInterestCalculator.Web.Pages;
 
 public class IndexBase : ComponentBase
 {
-    [Inject] ICalculatorService CalculatorService { get; set; }
-    [Inject] IJSRuntime JSRuntime { get; set; }
+    [Inject] private ICalculatorService CalculatorService { get; set; }
+    [Inject] private IJSRuntime JSRuntime { get; set; }
 
     protected CalculationInput input = new();
     protected Dictionary<string, CompoundInterval> compoundIntervals = new()
@@ -19,7 +19,7 @@ public class IndexBase : ComponentBase
         { "Annually", CompoundInterval.Annually }
     };
     protected bool totalDepositsColVisible;
-    protected CalculationResult[] result = Array.Empty<CalculationResult>();
+    protected CalculationResult[] result = [];
 
     protected async Task Calculate()
     {
@@ -32,10 +32,10 @@ public class IndexBase : ComponentBase
 
             result = CalculatorService.Calculate(
                 input.BaseAmount.Value,
-                input.InterestRatePercent.Value,
+                input.InterestRatePercent!.Value,
                 input.CompoundInterval,
-                input.MonthlyDeposit.Value,
-                input.CalcPeriodYrs.Value);
+                input.MonthlyDeposit!.Value,
+                input.CalcPeriodYrs!.Value);
 
             await JSRuntime.InvokeVoidAsync("jsFunctions.scrollToResults");
         }
